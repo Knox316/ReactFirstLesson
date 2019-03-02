@@ -3,84 +3,118 @@ import React, {
 } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium, {StyleRoot} from 'radium';
 
 class App extends Component {
   state = {
     persons: [
       {
-        name: 'Fernando', age: 30
+        id: 'a', name: 'Fernando', age: 30
       },
       {
-        name: 'Correia', age: 30
+        id: 'b', name: 'Correia', age: 30
       },
       {
-        name: 'Sandra', age: 29
+        id: 'c', name: 'Sandra', age: 29
       }
     ],
-    otherState: 'some other state'
+    otherState: 'some other state',
+    showPersons: false
   }
 
-  switchNameHandler = (newName) => {
-    this.setState({
-      persons: [
-        {
-          name: newName, age: 58
-        },
-        {
-          name: 'Fernando Correia', age: 30
-        },
-        {
-          name: 'Sandra Correia', age: 23
-        }
-      ]
-    })
+  deletePersonHandler = (personIndex) => {
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons});
   }
 
-  nameChangedHandler = (event) => {
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
+    });
+
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+
     this.setState({
-      persons: [
-        {
-          name: 'Antonio', age: 58
-        },
-        {
-          name: event.target.value, age: 30
-        },
-        {
-          name: 'Sandra Correia', age: 23
-        }
-      ]
+      persons: persons
     })
+  };
+
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState({
+      showPersons: !doesShow
+    });
   }
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'grey',
+      color: 'white',
       font: 'inherit',
       border: '1px solid gray',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgrey',
+        color: 'black'
+      }
     };
-    return ( 
-      <div className = "App" >
-      <h1> React app </h1>  
-      <p> This is working! </p>
-      <button
-        style={style} 
-        onClick={() => this.switchNameHandler('FERNANDO!')}>Switch Name</button>
-      <Person 
-        name={this.state.persons[0].name} 
-        age={this.state.persons[0].age}/>
-      <Person 
-        name={this.state.persons[1].name} 
-        age={this.state.persons[1].age} 
-        click={this.switchNameHandler.bind(this, 'Antonio')}
-        changed={this.nameChangedHandler}>My Hobbies: Gym</Person>
-      <Person 
-        name={this.state.persons[2].name} 
-        age={this.state.persons[2].age}/>
+
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+      <div>
+        {this.state.persons.map((person, index) => {
+          return <Person
+            click={() => this.deletePersonHandler(index)}
+            name={person.name} 
+            age={person.age} 
+            key={person.id}
+            changed={(event) => this.nameChangedHandler(event, person.id)}
+            />
+        })}      
       </div>
+      );
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'lightgrey',
+        color: 'black'
+      }
+    }
+
+    const classes = [];
+
+    if(this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+    if(this.state.persons.length <= 1) {
+      classes.push('bold');
+    }
+
+
+    return (
+      <StyleRoot>
+        <div className = "App" >
+        <h1> React app </h1>  
+        <p className={classes.join(' ')}> This is working! </p>
+        <button
+          style={style} 
+          onClick={this.togglePersonsHandler}>Toggle Persons</button>
+        {persons}
+        </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
