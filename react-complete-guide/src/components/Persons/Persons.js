@@ -1,54 +1,52 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
+
 import Person from './Person/Person';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 class Persons extends PureComponent {
-    //creation lifecycle
-    constructor(props) {
-        super(props);
-            
-    }
-    
-    componentWillMount() {
-        
-    }
-    
-    componentDidMount() {
-        
+    constructor( props ) {
+        super( props );
+        console.log( '[Persons.js] Inside Constructor', props );
     }
 
-    //updating lifecyle
-    componentWillReceiveProps(nextProps, nextState) {
-        //return nextProps.persons !== this.props.persons;
+    componentWillMount () {
+        console.log( '[Persons.js] Inside componentWillMount()' );
     }
 
-    // shouldComponentUpdate (nextProps, nextState) {
+    componentDidMount () {
+        console.log( '[Persons.js] Inside componentDidMount()' );
+    }
+
+    componentWillReceiveProps ( nextProps ) {
+        console.log( '[UPDATE Persons.js] Inside componentWillReceiveProps', nextProps );
+    }
+
+    // shouldComponentUpdate ( nextProps, nextState ) {
+    //     console.log( '[UPDATE Persons.js] Inside shouldComponentUpdate', nextProps, nextState );
     //     return nextProps.persons !== this.props.persons ||
     //         nextProps.changed !== this.props.changed ||
-    //         nextProps.clicked !== this.props.clicked; 
-
-    //     //return true;
+    //         nextProps.clicked !== this.props.clicked;
+    //     // return true;
     // }
 
-    componentWillUpdate(nextProps, nextState) {
-
+    componentWillUpdate ( nextProps, nextState ) {
+        console.log( '[UPDATE Persons.js] Inside componentWillUpdate', nextProps, nextState );
     }
 
-    componentDidUpdate() {
-
+    componentDidUpdate () {
+        console.log( '[UPDATE Persons.js] Inside componentDidUpdate' );
     }
 
     render () {
-        return this.props.persons.map((person, index) => {
-            return <ErrorBoundary key={person.id}>
-                    <Person
-                        click={() => this.props.clicked(index)}
-                        name={person.name} 
-                        age={person.age} 
-                        changed={(event) => this.props.changed(event, person.id)} />
-                </ErrorBoundary>
-        });
+        console.log( '[Persons.js] Inside render()' );
+        return this.props.persons.map( ( person, index ) => {
+            return <Person
+                click={() => this.props.clicked( index )}
+                name={person.name}
+                age={person.age}
+                key={person.id}
+                changed={( event ) => this.props.changed( event, person.id )} />
+        } );
     }
-} 
+}
 
 export default Persons;
