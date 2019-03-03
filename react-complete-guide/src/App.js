@@ -1,5 +1,5 @@
 import React, {
-  Component
+  PureComponent
 } from 'react';
 import classes from './App.css';
 import Person from './components/Persons/Person/Person';
@@ -7,7 +7,47 @@ import Person from './components/Persons/Person/Person';
 import Persons from './components/Persons/Persons';
 import Cockpit from './components/Cockpit/Cockpit';
 
-class App extends Component {
+class App extends PureComponent {
+  constructor(props) {
+    super(props);
+    // state = {
+    //   persons: [
+    //     {
+    //       id: 'a', name: 'Fernando', age: 30
+    //     },
+    //     {
+    //       id: 'b', name: 'Correia', age: 30
+    //     },
+    //     {
+    //       id: 'c', name: 'Sandra', age: 29
+    //     }
+    //   ],
+    //   otherState: 'some other state',
+    //   showPersons: false
+    // }
+
+  }
+
+  componentWillMount() {
+    
+  }
+
+  componentDidMount() {
+
+  }
+
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   return nextState.persons !== this.state.persons ||
+  //     nextState.showPersons !== this.state.showPersons;
+  // }
+
+  componentWillUpdate(nextProps, nextState) {
+
+  }
+
+  componentDidUpdate() {
+
+  }
   state = {
     persons: [
       {
@@ -69,6 +109,7 @@ class App extends Component {
     }
     return (
         <div className = {classes.App} >
+        <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
         <Cockpit
           appTitle={this.props.title}
           showPersons={this.state.showPersons}
